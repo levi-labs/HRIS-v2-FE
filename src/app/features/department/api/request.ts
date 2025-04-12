@@ -61,9 +61,35 @@ export const departmentApi = {
       throw new ResponseApiError(res.status, error.message, error.errors);
     }
     const result = await res.json();
-    console.log('result', result);
 
-    return result.data;
+    return {
+      data: result.data,
+      message: result.message,
+    };
+  },
+
+  update: async (id: number, data: any) => {
+    const res = await fetch(departmentEndpoints.update(id), {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+      credentials: 'include',
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      const error: { success: boolean; message: string; errors?: any[] } =
+        await res.json();
+      throw new ResponseApiError(res.status, error.message, error.errors);
+    }
+    const result = await res.json();
+
+    return {
+      data: result.data,
+      message: result.message,
+    };
   },
 
   delete: async (id: number) => {
@@ -83,6 +109,9 @@ export const departmentApi = {
     }
     const result = await res.json();
 
-    return result.data;
+    return {
+      data: result.data,
+      message: result.message,
+    };
   },
 };

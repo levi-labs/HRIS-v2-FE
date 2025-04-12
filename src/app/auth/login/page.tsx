@@ -9,11 +9,11 @@ export default function LoginPage() {
   const { data, isLoading, isError, isInitialized } = useMe();
   const router = useRouter();
 
-  useEffect(() => {
-    if (!isLoading && isInitialized && data) {
-      router.push('/dashboard');
-    }
-  }, [isInitialized, isLoading, data]);
+  // useEffect(() => {
+  //   if (!isLoading && isInitialized && data) {
+  //     router.push('/dashboard');
+  //   }
+  // }, [isInitialized, isLoading, data]);
 
   return (
     <div className='min-h-screen bg-gray-200 flex items-center justify-center'>

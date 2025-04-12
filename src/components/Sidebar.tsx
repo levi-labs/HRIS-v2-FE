@@ -32,9 +32,9 @@ export default function Sidebar({
         {/* image */}
         <div className='p-4 h-20 relative overflow-hidden'>
           <img
-            src='/assets/img/hris.png'
+            src='/assets/img/hriss.png'
             alt='Logo'
-            className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
+            className='w-1/2 h-1/2 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
           />
         </div>
         <nav className='flex flex-col space-y-2 p-4'>
