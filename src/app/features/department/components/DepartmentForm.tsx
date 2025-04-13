@@ -8,6 +8,7 @@ import {
 import ResponseApiError from '@/lib/api-errors';
 import { toast } from 'react-toastify';
 import CustomNotify from './CustomNotify';
+import { create } from 'domain';
 
 type DepartmentFormProps = {
   id?: number;
@@ -39,7 +40,6 @@ export default function DepartmentForm({
   const mutation = isEdit ? updateMutation : createMutation;
   useEffect(() => {
     if (mutation.isSuccess) {
-      console.log('mutation', mutation.data.message);
       toast.success(
         <CustomNotify title='Success' message={mutation.data.message} />
       );
@@ -49,6 +49,7 @@ export default function DepartmentForm({
 
   useEffect(() => {
     if (mutation.error instanceof ResponseApiError) {
+      const resError = mutation.error;
       if (mutation.error.status === 401) {
         onError?.(mutation.error.message);
         console.log(
@@ -56,6 +57,36 @@ export default function DepartmentForm({
           (createMutation.error as ResponseApiError).status
         );
       } else if (mutation.error.status === 422) {
+        if (Array.isArray(resError.validationErrors)) {
+          const allFields = ['name', 'phone']; // semua field yang mungkin error
+          allFields.forEach((field) => {
+            const input = document.getElementById(field);
+            const nextEl = input?.nextElementSibling;
+            const error = resError.validationErrors?.find(
+              (e) => e.field === field
+            );
+            if (input) {
+              if (error) {
+                // Jika error ada & belum ditampilkan
+                if (!nextEl || !nextEl.classList.contains('validation-error')) {
+                  const p = document.createElement('p');
+                  p.textContent = error.message;
+                  p.className = 'text-red-500 text-xs mt-1 validation-error';
+                  input.parentElement?.insertBefore(p, input.nextSibling);
+                } else {
+                  // Jika <p> sudah ada, update teks-nya (optional)
+                  nextEl.textContent = error.message;
+                }
+              } else {
+                // Jika tidak ada error tapi <p> masih ada → hapus
+                if (nextEl?.classList.contains('validation-error')) {
+                  nextEl.remove();
+                }
+              }
+            }
+          });
+        }
+        console.log('mutation is error', createError);
         console.log('createValidationErrors', createValidationErrors);
       } else {
         onError?.(mutation.error.message);
@@ -90,7 +121,7 @@ export default function DepartmentForm({
         <div className='mb-4'>
           <label
             htmlFor='name'
-            className='block text-sm font-medium text-gray-700'
+            className='block text-sm font-medium text-gray-700 mb-2'
           >
             Department Name
           </label>
@@ -102,14 +133,16 @@ export default function DepartmentForm({
             defaultValue={name || ''}
             className={`mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:ring-slate-400 `}
           />
-          {/* {validationErrors.includes('username') && (
-            <p className='text-red-500 text-xs mt-1'>{validationErrors[0]}</p>
-          )} */}
+          {mutation.isError && (
+            <p className='text-red-500 text-xs mt-1'>
+              {/* {createValidationErrors[0]} */}
+            </p>
+          )}
         </div>
         <div className='mb-4'>
           <label
             htmlFor='phone'
-            className='block text-sm font-medium text-gray-700'
+            className='block text-sm font-medium text-gray-700 mb-2'
           >
             Phone Number
           </label>
@@ -120,6 +153,11 @@ export default function DepartmentForm({
             defaultValue={phone || ''}
             className='mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:ring-slate-400'
           />
+          {mutation.isError && (
+            <p className='text-red-500 text-xs mt-1'>
+              {/* {createValidationErrors[1]} */}
+            </p>
+          )}
         </div>
         <button
           type='submit'

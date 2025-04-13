@@ -21,7 +21,9 @@ export const useDepartmentById = (id: number) => {
 };
 export const useCreateDepartment = () => {
   const [error, setError] = useState<string | string[]>('');
-  const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const [validationErrors, setValidationErrors] = useState<
+    { field: string; message: string }[]
+  >([]);
   const queryClient = useQueryClient();
   const createMutation = useMutation({
     mutationFn: departmentApi.create,
@@ -40,7 +42,8 @@ export const useCreateDepartment = () => {
             (validationError) => validationError.message
           );
           setError(messages);
-          console.log('validationErrors', messages); // Log array pesan
+          setValidationErrors(error.validationErrors);
+          console.log('validationErrors', error.validationErrors); // Log array pesan
         } else {
           setError(error.message || 'Terjadi kesalahan saat login.');
         }
@@ -84,7 +87,9 @@ type UpdateDepartmentParams = {
 
 export const useUpdateDepartment = () => {
   const [error, setError] = useState<string | string[]>('');
-  const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const [validationErrors, setValidationErrors] = useState<
+    { field: string; message: string }[]
+  >([]);
   const queryClient = useQueryClient();
   const updateMutation = useMutation({
     //update have 2 params id dan data
@@ -105,6 +110,7 @@ export const useUpdateDepartment = () => {
             (validationError) => validationError.message
           );
           setError(messages);
+          setValidationErrors(error.validationErrors);
           console.log('validationErrors', messages); // Log array pesan
         } else {
           setError(error.message || 'Terjadi kesalahan saat login.');
