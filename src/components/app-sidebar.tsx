@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Search, Settings } from 'lucide-react';
+import { Home } from "lucide-react";
 
 import {
   Sidebar,
@@ -10,13 +10,13 @@ import {
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubItem,
-} from '@/components/ui/sidebar';
+} from "@/components/ui/sidebar";
 
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from '@/components/ui/collapsible';
+} from "@/components/ui/collapsible";
 
 // Menu items.
 // const items = [
@@ -48,7 +48,7 @@ export function AppSidebar() {
                 <SidebarMenuSub>
                   <SidebarMenuSubItem>
                     <SidebarMenuButton asChild>
-                      <a href='/product/list'>Daftar Product</a>
+                      <a href="/product/list">Daftar Product</a>
                     </SidebarMenuButton>
                   </SidebarMenuSubItem>
                 </SidebarMenuSub>
@@ -66,7 +66,7 @@ export function AppSidebar() {
                 <SidebarMenuSub>
                   <SidebarMenuSubItem>
                     <SidebarMenuButton asChild>
-                      <a href='/supplier/list'>Daftar Supplier</a>
+                      <a href="/supplier/list">Daftar Supplier</a>
                     </SidebarMenuButton>
                   </SidebarMenuSubItem>
                 </SidebarMenuSub>
@@ -84,7 +84,7 @@ export function AppSidebar() {
                 <SidebarMenuSub>
                   <SidebarMenuSubItem>
                     <SidebarMenuButton asChild>
-                      <a href='/setting/user'>User</a>
+                      <a href="/setting/user">User</a>
                     </SidebarMenuButton>
                   </SidebarMenuSubItem>
                 </SidebarMenuSub>
@@ -102,12 +102,12 @@ export function AppSidebar() {
                 <SidebarMenuSub>
                   <SidebarMenuSubItem>
                     <SidebarMenuButton asChild>
-                      <a href='/barang/masuk'>Barang Masuk</a>
+                      <a href="/barang/masuk">Barang Masuk</a>
                     </SidebarMenuButton>
                   </SidebarMenuSubItem>
                   <SidebarMenuSubItem>
                     <SidebarMenuButton asChild>
-                      <a href='/barang/keluar'>Barang Keluar</a>
+                      <a href="/barang/keluar">Barang Keluar</a>
                     </SidebarMenuButton>
                   </SidebarMenuSubItem>
                 </SidebarMenuSub>
@@ -117,7 +117,7 @@ export function AppSidebar() {
             {/* Kasir */}
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
-                <a href='/kasir'>Kasir</a>
+                <a href="/kasir">Kasir</a>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>

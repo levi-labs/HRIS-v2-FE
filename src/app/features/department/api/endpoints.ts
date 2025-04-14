@@ -1,5 +1,6 @@
 export const departmentEndpoints = {
-  getAll: () => `${process.env.NEXT_PUBLIC_API_URL}/api/department`,
+  getAll: (page: number, limit: number, search: string) =>
+    `${process.env.NEXT_PUBLIC_API_URL}/api/department/?page=${page}&limit=${limit}&${search}`,
   create: () => `${process.env.NEXT_PUBLIC_API_URL}/api/department`,
   getOne: (id: string | number) =>
     `${process.env.NEXT_PUBLIC_API_URL}/api/department/${id}`,

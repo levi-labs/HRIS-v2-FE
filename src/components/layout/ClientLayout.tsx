@@ -1,10 +1,11 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Navbar from '@/components/Navbar';
-import Sidebar from '@/components/Sidebar';
-import { usePathname } from 'next/navigation';
-import { Bounce, ToastContainer } from 'react-toastify';
+import { useState } from "react";
+import Navbar from "@/components/Navbar";
+import Sidebar from "@/components/Sidebar";
+import { usePathname } from "next/navigation";
+import { Bounce, ToastContainer } from "react-toastify";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 export default function ClientLayout({
   children,
@@ -12,7 +13,7 @@ export default function ClientLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const disabledMenu = ['/auth/login', '/auth/register'];
+  const disabledMenu = ["/auth/login", "/auth/register"];
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -22,7 +23,7 @@ export default function ClientLayout({
       ) : (
         <>
           <ToastContainer
-            position='top-right'
+            position="top-right"
             autoClose={5000}
             hideProgressBar={false}
             newestOnTop
@@ -31,19 +32,22 @@ export default function ClientLayout({
             pauseOnFocusLoss
             draggable
             pauseOnHover
-            theme='dark'
+            theme="dark"
             transition={Bounce}
           />
-          <div className='flex h-full bg-slate-200'>
+          <div className="flex h-screen bg-slate-200">
             <Sidebar
               isOpen={sidebarOpen}
               onClose={() => setSidebarOpen(false)}
             />
-            <div className='flex flex-col flex-1 overflow-hidden'>
+            <div className="flex flex-col flex-1 overflow-hidden">
               <Navbar onToggleSidebar={() => setSidebarOpen(true)} />
-              <main className='flex-1 overflow-y-auto p-4'>{children}</main>
+              <main className="flex-1 overflow-y-auto p-4">{children}</main>
             </div>
           </div>
+          <ReactQueryDevtools
+            initialIsOpen={false}
+          />
         </>
       )}
     </>

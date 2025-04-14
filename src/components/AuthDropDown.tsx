@@ -1,10 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from "react";
 
 interface AuthDropdownProps {
   username: string;
-  onLogout?: () => void;
 }
-const AuthDropdown = ({ username, onLogout }: AuthDropdownProps) => {
+const AuthDropdown = ({ username }: AuthDropdownProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLDivElement>(null); // Ref untuk elemen pemicu (Welcome, Admin)
@@ -24,15 +23,15 @@ const AuthDropdown = ({ username, onLogout }: AuthDropdownProps) => {
     }
   };
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isDropdownOpen, dropdownRef, triggerRef]);
   return (
-    <div className='relative' ref={dropdownRef}>
+    <div className="relative" ref={dropdownRef}>
       <div
-        className='text-sm text-wrap text-gray-600 cursor-pointer'
+        className="text-sm text-wrap text-gray-600 cursor-pointer"
         onClick={toggleDropdown}
         //on click outside of dropdown hide
         ref={triggerRef}
@@ -43,25 +42,25 @@ const AuthDropdown = ({ username, onLogout }: AuthDropdownProps) => {
       {isDropdownOpen && (
         <div
           onMouseLeave={() => setIsDropdownOpen(false)} // hide on mouse leave from dropdown
-          className='absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'
+          className="absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
         >
           <div
-            className='py-1'
-            role='menu'
-            aria-orientation='vertical'
-            aria-labelledby='options-menu-button'
+            className="py-1"
+            role="menu"
+            aria-orientation="vertical"
+            aria-labelledby="options-menu-button"
           >
             <a
-              href='/profile'
-              className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
-              role='menuitem'
+              href="/profile"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              role="menuitem"
             >
               Profile
             </a>
             <a
-              href='/logout'
-              className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
-              role='menuitem'
+              href="/logout"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              role="menuitem"
             >
               Logout
             </a>

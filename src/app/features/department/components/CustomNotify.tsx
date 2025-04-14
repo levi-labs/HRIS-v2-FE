@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 
 export default function CustomNotify({
   title,
   message,
 }: {
   title: string;
-  message: any;
+  message: string;
 }) {
   return (
     <div>

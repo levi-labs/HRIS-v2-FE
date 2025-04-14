@@ -1,78 +1,62 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import departmentEndpoints from '../api/endpoints';
-import { departmentApi } from '@/app/features/department/api/request';
-import ResponseApiError from '@/lib/api-errors';
-import { useState } from 'react';
+'use client'
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { departmentApi } from "@/app/features/department/api/request";
+import ResponseApiError from "@/lib/api-errors";
+import { useState } from "react";
 
-export const useDepartments = () => {
+export const useDepartments = (page = 1, limit = 10, search = "") => {
+ 
+ 
   return useQuery({
-    queryKey: ['departments'],
-    queryFn: departmentApi.getAll,
-    refetchOnWindowFocus: true,
+    queryKey: ["departments", page, search],
+    queryFn: 
+      () => departmentApi.getAll(page, limit, search),
+    retry: false,
+
+    
   });
 };
 
 export const useDepartmentById = (id: number) => {
   return useQuery({
-    queryKey: ['department', id],
+    queryKey: ["department", id],
     queryFn: () => departmentApi.getById(id),
     enabled: !!id,
   });
 };
 export const useCreateDepartment = () => {
-  const [error, setError] = useState<string | string[]>('');
+  const [error, setError] = useState<string | string[]>("");
   const [validationErrors, setValidationErrors] = useState<
     { field: string; message: string }[]
   >([]);
   const queryClient = useQueryClient();
   const createMutation = useMutation({
     mutationFn: departmentApi.create,
-    onSuccess: (result) => {
-      console.log('result', result);
-      queryClient.invalidateQueries({ queryKey: ['departments'] });
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["departments"] });
     },
     onError: (error) => {
-      setError(''); // Reset pesan error umum
+      setError(""); // Reset pesan error umum
       setValidationErrors([]); // Reset array validationErrors          if (error instanceof ResponseApiError) {
       if (error instanceof ResponseApiError) {
         if (error.status === 401) {
           setError(error.message);
         } else if (Array.isArray(error.validationErrors)) {
           const messages = error.validationErrors.map(
-            (validationError) => validationError.message
+            (validationError) => validationError.message,
           );
           setError(messages);
           setValidationErrors(error.validationErrors);
-          console.log('validationErrors', error.validationErrors); // Log array pesan
         } else {
-          setError(error.message || 'Terjadi kesalahan saat login.');
+          setError(error.message || "Terjadi kesalahan saat login.");
         }
       } else if (error instanceof Error) {
-        setError(error.message || 'Terjadi kesalahan jaringan atau lainnya.');
+        setError(error.message || "Terjadi kesalahan jaringan atau lainnya.");
       } else {
-        setError('Terjadi kesalahan yang tidak diketahui.');
+        setError("Terjadi kesalahan yang tidak diketahui.");
       }
     },
   });
-  // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-
-  //   const name = (
-  //     event.currentTarget.elements.namedItem('name') as HTMLInputElement
-  //   )?.value;
-  //   const phone = (
-  //     event.currentTarget.elements.namedItem('phone') as HTMLInputElement
-  //   )?.value;
-
-  //   createMutation.mutate(
-  //     { name, phone },
-  //     {
-  //       onSuccess: (data) => {
-  //         console.log('data', data);
-  //       },
-  //     }
-  //   );
-  // };
 
   return {
     createMutation,
@@ -86,7 +70,7 @@ type UpdateDepartmentParams = {
 };
 
 export const useUpdateDepartment = () => {
-  const [error, setError] = useState<string | string[]>('');
+  const [error, setError] = useState<string | string[]>("");
   const [validationErrors, setValidationErrors] = useState<
     { field: string; message: string }[]
   >([]);
@@ -96,29 +80,27 @@ export const useUpdateDepartment = () => {
     mutationFn: ({ id, data }: UpdateDepartmentParams) =>
       departmentApi.update(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['departments'] });
+      queryClient.invalidateQueries({ queryKey: ["departments"] });
     },
     onError: (error) => {
-      console.log('error', error);
-      setError(''); // Reset pesan error umum
+      setError(""); // Reset pesan error umum
       setValidationErrors([]); // Reset array validationErrors          if (error instanceof ResponseApiError) {
       if (error instanceof ResponseApiError) {
         if (error.status === 401) {
           setError(error.message);
         } else if (Array.isArray(error.validationErrors)) {
           const messages = error.validationErrors.map(
-            (validationError) => validationError.message
+            (validationError) => validationError.message,
           );
           setError(messages);
           setValidationErrors(error.validationErrors);
-          console.log('validationErrors', messages); // Log array pesan
         } else {
-          setError(error.message || 'Terjadi kesalahan saat login.');
+          setError(error.message || "Terjadi kesalahan saat login.");
         }
       } else if (error instanceof Error) {
-        setError(error.message || 'Terjadi kesalahan jaringan atau lainnya.');
+        setError(error.message || "Terjadi kesalahan jaringan atau lainnya.");
       } else {
-        setError('Terjadi kesalahan yang tidak diketahui.');
+        setError("Terjadi kesalahan yang tidak diketahui.");
       }
     },
   });
@@ -135,7 +117,7 @@ export const useDeleteDepartment = () => {
   const deleteMutation = useMutation({
     mutationFn: departmentApi.delete,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['departments'] });
+      queryClient.invalidateQueries({ queryKey: ["departments"] });
     },
   });
 

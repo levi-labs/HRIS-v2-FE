@@ -1,14 +1,11 @@
-import React, { useEffect } from 'react';
-
-import { useRouter } from 'next/navigation';
+import React, { useEffect } from "react";
 import {
   useCreateDepartment,
   useUpdateDepartment,
-} from '../hooks/useDepartment';
-import ResponseApiError from '@/lib/api-errors';
-import { toast } from 'react-toastify';
-import CustomNotify from './CustomNotify';
-import { create } from 'domain';
+} from "../hooks/useDepartment";
+import ResponseApiError from "@/lib/api-errors";
+import { toast } from "react-toastify";
+import CustomNotify from "./CustomNotify";
 
 type DepartmentFormProps = {
   id?: number;
@@ -24,24 +21,15 @@ export default function DepartmentForm({
   onClose,
   onError,
 }: DepartmentFormProps) {
-  const router = useRouter();
   const isEdit = !!id;
-  const {
-    createMutation,
-    error: createError,
-    validationErrors: createValidationErrors,
-  } = useCreateDepartment();
-  const {
-    updateMutation,
-    error: updateError,
-    validationErrors: updateValidationErrors,
-  } = useUpdateDepartment();
+  const { createMutation } = useCreateDepartment();
+  const { updateMutation } = useUpdateDepartment();
 
   const mutation = isEdit ? updateMutation : createMutation;
   useEffect(() => {
     if (mutation.isSuccess) {
       toast.success(
-        <CustomNotify title='Success' message={mutation.data.message} />
+        <CustomNotify title="Success" message={mutation.data.message} />,
       );
       onClose();
     }
@@ -52,26 +40,23 @@ export default function DepartmentForm({
       const resError = mutation.error;
       if (mutation.error.status === 401) {
         onError?.(mutation.error.message);
-        console.log(
-          'createError',
-          (createMutation.error as ResponseApiError).status
-        );
+        // console.log("error", mutation.error.message);
       } else if (mutation.error.status === 422) {
         if (Array.isArray(resError.validationErrors)) {
-          const allFields = ['name', 'phone']; // semua field yang mungkin error
+          const allFields = ["name", "phone"]; // semua field yang mungkin error
           allFields.forEach((field) => {
             const input = document.getElementById(field);
             const nextEl = input?.nextElementSibling;
             const error = resError.validationErrors?.find(
-              (e) => e.field === field
+              (e) => e.field === field,
             );
             if (input) {
               if (error) {
                 // Jika error ada & belum ditampilkan
-                if (!nextEl || !nextEl.classList.contains('validation-error')) {
-                  const p = document.createElement('p');
+                if (!nextEl || !nextEl.classList.contains("validation-error")) {
+                  const p = document.createElement("p");
                   p.textContent = error.message;
-                  p.className = 'text-red-500 text-xs mt-1 validation-error';
+                  p.className = "text-red-500 text-xs mt-1 validation-error";
                   input.parentElement?.insertBefore(p, input.nextSibling);
                 } else {
                   // Jika <p> sudah ada, update teks-nya (optional)
@@ -79,30 +64,27 @@ export default function DepartmentForm({
                 }
               } else {
                 // Jika tidak ada error tapi <p> masih ada → hapus
-                if (nextEl?.classList.contains('validation-error')) {
+                if (nextEl?.classList.contains("validation-error")) {
                   nextEl.remove();
                 }
               }
             }
           });
         }
-        console.log('mutation is error', createError);
-        console.log('createValidationErrors', createValidationErrors);
       } else {
         onError?.(mutation.error.message);
       }
     }
-    // onClose();
   }, [mutation.isError, mutation.error]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const name = (
-      event.currentTarget.elements.namedItem('name') as HTMLInputElement
+      event.currentTarget.elements.namedItem("name") as HTMLInputElement
     )?.value;
     const phone = (
-      event.currentTarget.elements.namedItem('phone') as HTMLInputElement
+      event.currentTarget.elements.namedItem("phone") as HTMLInputElement
     )?.value;
     const payload = {
       name,
@@ -117,54 +99,54 @@ export default function DepartmentForm({
   };
   return (
     <>
-      <form className='space-y-4' onSubmit={handleSubmit} autoFocus>
-        <div className='mb-4'>
+      <form className="space-y-4" onSubmit={handleSubmit} autoFocus>
+        <div className="mb-4">
           <label
-            htmlFor='name'
-            className='block text-sm font-medium text-gray-700 mb-2'
+            htmlFor="name"
+            className="block text-sm font-medium text-gray-700 mb-2"
           >
             Department Name
           </label>
           <input
             autoFocus
-            name='name'
-            type='text'
-            id='name'
-            defaultValue={name || ''}
+            name="name"
+            type="text"
+            id="name"
+            defaultValue={name || ""}
             className={`mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:ring-slate-400 `}
           />
           {mutation.isError && (
-            <p className='text-red-500 text-xs mt-1'>
+            <p className="text-red-500 text-xs mt-1">
               {/* {createValidationErrors[0]} */}
             </p>
           )}
         </div>
-        <div className='mb-4'>
+        <div className="mb-4">
           <label
-            htmlFor='phone'
-            className='block text-sm font-medium text-gray-700 mb-2'
+            htmlFor="phone"
+            className="block text-sm font-medium text-gray-700 mb-2"
           >
             Phone Number
           </label>
           <input
-            name='phone'
-            type='text'
-            id='phone'
-            defaultValue={phone || ''}
-            className='mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:ring-slate-400'
+            name="phone"
+            type="text"
+            id="phone"
+            defaultValue={phone || ""}
+            className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:ring-slate-400"
           />
           {mutation.isError && (
-            <p className='text-red-500 text-xs mt-1'>
+            <p className="text-red-500 text-xs mt-1">
               {/* {createValidationErrors[1]} */}
             </p>
           )}
         </div>
         <button
-          type='submit'
-          className='w-full bg-slate-900 hover:bg-slate-700 text-white py-2 px-4 rounded-md'
+          type="submit"
+          className="w-full bg-slate-900 hover:bg-slate-700 text-white py-2 px-4 rounded-md"
           disabled={mutation.isPending}
         >
-          {mutation.isPending ? 'Processing' : 'Submit'}
+          {mutation.isPending ? "Processing" : "Submit"}
         </button>
       </form>
     </>
