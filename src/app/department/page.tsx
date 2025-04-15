@@ -10,6 +10,7 @@ import { Search } from "lucide-react";
 export default function DepartmentPage() {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [search, setSearch] = useState("");
 
   const [error, setError] = useState<string | string[]>("");
   const handleError =useCallback((error: string) => {
@@ -27,6 +28,15 @@ export default function DepartmentPage() {
 
   const handleAdd = () => {
     setIsModalOpen(true);
+  };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const searchValue = e.target.value;
+    console.log("Search value:", searchValue);
+    // Implement your search logic here
+    if (searchValue.length > 0) {
+      setSearch(searchValue);
+    }
   };
   return (
     <ProtectedPage>
@@ -55,6 +65,7 @@ export default function DepartmentPage() {
                 type="text"
                 name="search"
                 id="search"
+                onChange={handleSearch}
                 className="w-full h-10 pl-16 sm:pl-24 lg:pl-16 pr-3 text-black border border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 overflow-hidden"
               />
             </div>
@@ -63,7 +74,7 @@ export default function DepartmentPage() {
 
         <div className="w-full flex flex-col justify-center overflow-auto ">
           <Suspense fallback={<div>Loading...</div>}>
-            <DepartmentTable onError={handleError} />
+            <DepartmentTable onError={handleError} onSearch={search} />
           </Suspense>
         </div>
       </div>

@@ -36,6 +36,9 @@ export const departmentApi = {
     }
     const result = await res.json();
 
+    console.log("result search", result.data);
+    
+
     return {
       data: result.data,
       message: result.message,

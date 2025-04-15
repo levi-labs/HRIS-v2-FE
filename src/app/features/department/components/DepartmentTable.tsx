@@ -25,9 +25,10 @@ type Department = {
 
 export default function DepartmentTable({
   onError,
+  onSearch,
 }: {
   onError?: (error: string) => void;
-  search?: string;
+  onSearch?: string;
 }) {
   const router = useRouter();
   const params = useSearchParams();
@@ -40,7 +41,7 @@ export default function DepartmentTable({
     isPending: isPendingGetAll,
     isError: isErrorGetAll,
     error: errorGetAll,
-  } = useDepartments(page ? Number(page) : 1, 2);
+  } = useDepartments(page ? Number(page) : 1, 2, onSearch ? onSearch : "");
 
   const { data: department, isPending: isPendingById } =
     useDepartmentById(dataId);
@@ -71,12 +72,7 @@ export default function DepartmentTable({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deleteMutation.isSuccess, deleteMutation.data?.message]);
-  // useEffect(() => {
-  //   if (!deleteMutation.isSuccess) {
-  //     setIsToastShown(false);
-  //   }
-  // }, [deleteMutation.isSuccess]);
-
+ 
   useEffect(() => {
     if (isErrorGetAll && (errorGetAll as ResponseApiError)?.status === 401) {
       localStorage.removeItem("token");
@@ -88,8 +84,9 @@ export default function DepartmentTable({
       
     }
   }, [isErrorGetAll, errorGetAll, onError,router]);
-  
 
+ 
+ 
   const renderTableContent = () => {
     if (isPendingGetAll && !isErrorGetAll) {
       return (
